@@ -1,3 +1,3 @@
-module.exports = function restify(endpoints) {
-  console.log(endpoints);
-};
+const restify = require("./src/restify");
+
+module.exports = restify;
