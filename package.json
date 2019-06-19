@@ -4,19 +4,28 @@
   "description": "Expose GraphQL queries, mutations and subscription as configurable RESTful endpoints",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "format": "prettier --write **/*.{js,md,json}"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/j-f-r/gthor.git"
   },
   "keywords": [
-    "graphql"
+    "graphql",
+    "rest",
+    "gthor"
   ],
   "author": "Joao Furtado Resende",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/j-f-r/gthor/issues"
   },
-  "homepage": "https://github.com/j-f-r/gthor#readme"
+  "homepage": "https://github.com/j-f-r/gthor#readme",
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^5.0.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.18.2"
+  }
 }
