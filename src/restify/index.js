@@ -24,11 +24,13 @@ const restify = (schema, source) => (req, res, next) => {
 };
 
 const mapEndpointToGql = (router, schema, endpoint) => {
-  const method = endpoint.method || utils.operationMethod(endpoint.source);
+  const definition = utils.gqlDefinition(endpoint.source);
+  const method = endpoint.method || utils.methods[definition.operation];
   const middlewares = [
     restify(schema, endpoint.source),
     endpoint.postProcess || defaultGqlResponseParser
   ];
+
   router[method](endpoint.url, middlewares);
 };
 

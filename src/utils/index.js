@@ -13,10 +13,10 @@ const methods = {
   [INVALID]: "invalid"
 };
 
-const operationMethod = source => {
+const gqlDefinition = source => {
   const { definitions } = gql(source);
-  if (definitions.length !== 1) return INVALID;
-  return methods[definitions[0]["operation"]];
+  if (definitions.length !== 1) return undefined;
+  return definitions[0];
 };
 
-module.exports = { methods, operationMethod };
+module.exports = { methods, gqlDefinition };

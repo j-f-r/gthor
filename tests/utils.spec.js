@@ -48,24 +48,26 @@ const invalidSources = [
   }`
 ];
 
-describe("Test operationMethod", () => {
+describe("Test gqlDefinition", () => {
   test("Queries", () => {
-    queries.map(query =>
-      expect(utils.operationMethod(query)).toBe(utils.methods["query"])
-    );
+    queries.map(query => {
+      const definition = utils.gqlDefinition(query);
+      expect(utils.methods[definition.operation]).toBe(utils.methods["query"]);
+    });
   });
 
   test("Mutations", () => {
-    mutations.map(mutation =>
-      expect(utils.operationMethod(mutation)).toBe(utils.methods["mutation"])
-    );
+    mutations.map(mutation => {
+      const definition = utils.gqlDefinition(mutation);
+      expect(utils.methods[definition.operation]).toBe(
+        utils.methods["mutation"]
+      );
+    });
   });
 
   test("Invald sources", () => {
     invalidSources.map(invalidSource =>
-      expect(utils.operationMethod(invalidSource)).toBe(
-        utils.methods["invalid"]
-      )
+      expect(utils.gqlDefinition(invalidSource)).toBe(undefined)
     );
   });
 });
