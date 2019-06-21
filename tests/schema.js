@@ -13,11 +13,22 @@ module.exports = makeExecutableSchema({
       users: [User]
       user(id: ID!): User
     }
+
+    type Mutation {
+      createUser(name: String!): User
+    }
   `,
   resolvers: {
     Query: {
       users: () => testUsers,
       user: (_, { id }) => testUsers.filter(user => user.id === id)[0]
+    },
+    Mutation: {
+      createUser: (_, { name }) => {
+        const newUser = { id: `${testUsers.length + 1}`, name };
+        testUsers.push(newUser);
+        return newUser;
+      }
     }
   }
 });
