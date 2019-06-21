@@ -5,7 +5,16 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --detectOpenHandles",
+    "test:coverage": "npm test -- --coverage",
+    "test:badges": "npm run test:coverage  && jest-coverage-badges output \"badges\"",
     "format": "prettier --write **/*.{js,md,json}"
+  },
+  "jest": {
+    "coverageReporters": [
+      "json-summary",
+      "text",
+      "lcov"
+    ]
   },
   "repository": {
     "type": "git",
@@ -36,6 +45,7 @@
     "express": "^4.17.1",
     "graphql": "^14.3.1",
     "graphql-tag": "^2.10.1",
-    "graphql-tools": "^4.0.4"
+    "graphql-tools": "^4.0.4",
+    "jest-coverage-badges": "^1.1.2"
   }
 }
