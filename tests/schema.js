@@ -16,7 +16,8 @@ module.exports = makeExecutableSchema({
   `,
   resolvers: {
     Query: {
-      users: () => testUsers
+      users: () => testUsers,
+      user: (_, { id }) => testUsers.filter(user => user.id === id)[0]
     }
   }
 });

@@ -1,5 +1,6 @@
 const express = require("express");
 const { graphql } = require("graphql");
+const bodyParser = require("body-parser");
 
 const utils = require("../utils");
 
@@ -36,7 +37,7 @@ const mapEndpointToGql = (router, schema, endpoint) => {
 
 module.exports = (schema, endpoints = []) => {
   const router = express.Router();
-
+  router.use(bodyParser.json());
   endpoints.map(endpoint => mapEndpointToGql(router, schema, endpoint));
 
   return router;

@@ -8,6 +8,15 @@ const endpoints = [
   {
     source: "{ users { id name } }",
     url: "/users"
+  },
+  {
+    source: "query User($id: ID!){ user(id: $id) { id name } }",
+    url: "/users/:id"
+  },
+  {
+    source: "query User($id: ID!){ user(id: $id) { id name } }",
+    url: "/users",
+    method: "post"
   }
 ];
 
@@ -36,6 +45,34 @@ describe("Test restify responds to", () => {
     expect(response.statusCode).toBe(200);
     expect(response.body).toStrictEqual({
       users: [{ id: "1", name: "John" }, { id: "2", name: "Mary" }]
+    });
+  });
+
+  test("Queries with url parameters", async () => {
+    let response = await agent.get("/api/users/1");
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({
+      user: { id: "1", name: "John" }
+    });
+
+    response = await agent.get("/api/users/2");
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({
+      user: { id: "2", name: "Mary" }
+    });
+  });
+
+  test("Queries with body parameters", async () => {
+    let response = await agent.post("/api/users").send({ id: "1" });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({
+      user: { id: "1", name: "John" }
+    });
+
+    response = await agent.post("/api/users").send({ id: "2" });
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({
+      user: { id: "2", name: "Mary" }
     });
   });
 });
