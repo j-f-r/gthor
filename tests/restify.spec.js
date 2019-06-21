@@ -26,7 +26,7 @@ const endpoints = [
   {
     source: "query User($id: ID!){ user(id: $id) { id name } }",
     url: "/custom-users/:id",
-    processResponse: (req, res) =>
+    responseHandler: (req, res) =>
       res.status(200).send({ customResponse: req.gqlRes.data })
   }
 ];
