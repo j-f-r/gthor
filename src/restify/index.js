@@ -36,6 +36,10 @@ const defaultResponseHandler = (req, res) => {
   }
 };
 
+const defaultContext = async (req, res) => {
+  return { req, res };
+};
+
 /**
  * Creates a middleware to handle call GraphQL.
  *
@@ -49,12 +53,13 @@ const defaultResponseHandler = (req, res) => {
  * @param {String} source - GraphQL source to be executed
  * @return {function} Express middleware callback
  */
-const restify = (schema, source) => (req, res, next) => {
+const restify = (schema, context, source) => async (req, res, next) => {
   graphql({
     schema,
     source,
     // Interpolates body and url params variables to pass to GraphQL
-    variableValues: { ...req.body, ...req.params }
+    variableValues: { ...req.body, ...req.params },
+    contextValue: await context(req, res)
   }).then(gqlRes => {
     // Adds the GraphQL response to the request object
     // so that further middlewares can use it.
@@ -69,9 +74,10 @@ const restify = (schema, source) => (req, res, next) => {
  *
  * @param {Object} router - Express router
  * @param {Object} schema - GraphQL executable schema
+ * @param {function} context - Function that generates the context
  * @param {Endpoint} endpoint - Endpoint configuration
  */
-const mapEndpointToGql = (router, schema, endpoint) => {
+const mapEndpointToGql = (router, schema, context, endpoint) => {
   // Get the gql definition from the endpoint's source
   const definition = utils.gqlDefinition(endpoint.source);
   // Use the method required by the endpoint but defaults to the appropriate
@@ -82,17 +88,19 @@ const mapEndpointToGql = (router, schema, endpoint) => {
   // received configured per endpoint, if no function is configured in
   // responseHandler, the default response handler is used.
   const middlewares = [
-    restify(schema, endpoint.source),
+    restify(schema, context || defaultContext, endpoint.source),
     endpoint.responseHandler || defaultResponseHandler
   ];
   // Finally adds the endpoint + middlewares to the router.
   router[method](endpoint.url, middlewares);
 };
 
-module.exports = (schema, endpoints = []) => {
+module.exports = (schema, endpoints = [], context = undefined) => {
   const router = express.Router();
   router.use(bodyParser.json());
-  endpoints.map(endpoint => mapEndpointToGql(router, schema, endpoint));
+  endpoints.map(endpoint =>
+    mapEndpointToGql(router, schema, context, endpoint)
+  );
 
   return router;
 };

@@ -28,11 +28,21 @@ const endpoints = [
     url: "/custom-users/:id",
     responseHandler: (req, res) =>
       res.status(200).send({ customResponse: req.gqlRes.data })
+  },
+  {
+    source: "{ me { id name } }",
+    url: "/me"
   }
 ];
 
 const app = express();
-const gthorRouter = gthor(schema, endpoints);
+const gthorRouter = gthor(schema, endpoints, async req => {
+  return {
+    // In a production environment, this would be encrypted
+    // with something like JWT
+    user: req.headers.user
+  };
+});
 
 app.use("/api", gthorRouter);
 
@@ -96,5 +106,17 @@ describe("Test restify uses custom response parsing functions", () => {
     expect(response.body).toStrictEqual({
       customResponse: { user: { id: "1", name: "John" } }
     });
+  });
+});
+
+describe("Test context passing", () => {
+  test("Should parse id from context", async () => {
+    let response = await agent.get("/api/me").set("User", "1");
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({ id: "1", name: "John" });
+
+    response = await agent.get("/api/me").set("User", "2");
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toStrictEqual({ id: "2", name: "Mary" });
   });
 });

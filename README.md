@@ -57,9 +57,27 @@ app.use(
 
 which will execute the GraphQL query `{ users { name } }` every time a request to `/rest/users` is made. It's worth it to point out that this request will only return user names, which wouldn't be possible in an automatic-centric package.
 
+### Context
+
+An `async` context generator function can be provided via:
+
+```
+gthor(
+    schema,
+    [{
+        url: '/users',
+        source: '{ users { name } }'
+    }],
+    async (req) => {
+        user: req.headers.user, // This would come from a token
+        db: new MongoClient(url) // Example of a shared database connection
+    }
+)
+```
+
 ## TODO
 
-- [ ] Passing GraphQL context
+- [ ] Automatic OpenAPI documentation
 - [ ] Subscriptions
 - [ ] Automatic endpoints generation
 

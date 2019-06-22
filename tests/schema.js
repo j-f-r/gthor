@@ -10,6 +10,7 @@ module.exports = makeExecutableSchema({
     }
 
     type Query {
+      me: User
       users: [User]
       user(id: ID!): User
     }
@@ -21,7 +22,10 @@ module.exports = makeExecutableSchema({
   resolvers: {
     Query: {
       users: () => testUsers,
-      user: (_, { id }) => testUsers.filter(user => user.id === id)[0]
+      user: (_, { id }) => testUsers.filter(user => user.id === id)[0],
+      me: (root, args, ctx, info) => {
+        return testUsers.filter(user => user.id === ctx.user)[0];
+      }
     },
     Mutation: {
       createUser: (_, { name }) => {
