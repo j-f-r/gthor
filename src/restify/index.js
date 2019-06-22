@@ -95,7 +95,7 @@ const mapEndpointToGql = (router, schema, context, endpoint) => {
   router[method](endpoint.url, middlewares);
 };
 
-module.exports = (schema, endpoints = [], context = undefined) => {
+module.exports = ({ schema, endpoints = [], context = undefined }) => {
   const router = express.Router();
   router.use(bodyParser.json());
   endpoints.map(endpoint =>
