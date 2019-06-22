@@ -55,6 +55,7 @@ delegates the response sending to another middleware by calling next().
 ### Parameters
 
 -   `schema` **[Object][13]** GraphQL executable schema
+-   `context`  
 -   `source` **[String][14]** GraphQL source to be executed
 
 Returns **[function][15]** Express middleware callback
@@ -67,6 +68,7 @@ Maps an endpoint configuration to a configuration in the router
 
 -   `router` **[Object][13]** Express router
 -   `schema` **[Object][13]** GraphQL executable schema
+-   `context` **[function][15]** Function that generates the context
 -   `endpoint` **[Endpoint][16]** Endpoint configuration
 
 ## QUERY
