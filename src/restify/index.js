@@ -32,7 +32,7 @@ const defaultResponseHandler = (req, res) => {
     // This line pulls out the first item in the response
     res.status(200).send(gqlRes.data[Object.keys(gqlRes.data)[0]]);
   } else {
-    res.status(500).send(gqlRes.error);
+    res.status(500).send(gqlRes.errors);
   }
 };
 
