@@ -36,8 +36,8 @@ const defaultResponseHandler = (req, res) => {
   }
 };
 
-const defaultContext = async (req, res) => {
-  return { req, res };
+const defaultContext = async req => {
+  return req;
 };
 
 /**
