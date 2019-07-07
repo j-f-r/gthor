@@ -58,7 +58,7 @@ const restify = (schema, context, source) => async (req, res, next) => {
     schema,
     source,
     // Interpolates body and url params variables to pass to GraphQL
-    variableValues: { ...req.body, ...req.params },
+    variableValues: { ...req.body, ...req.params, ...req.query },
     contextValue: await context(req, res)
   }).then(gqlRes => {
     // Adds the GraphQL response to the request object
