@@ -24,15 +24,15 @@ const utils = require("../utils");
  */
 const defaultResponseHandler = (req, res) => {
   const { gqlRes } = req;
-  if (gqlRes.data) {
+  if (gqlRes.errors) {
+    res.status(500).send(gqlRes.errors);
+  } else {
     // GraphQL responses always have the query/mutation name
     // encapsulating the result. For someone interacting with it
     // through normal REST APIs it might be better to simply return the
     // data in the payload.
     // This line pulls out the first item in the response
     res.status(200).send(gqlRes.data[Object.keys(gqlRes.data)[0]]);
-  } else {
-    res.status(500).send(gqlRes.errors);
   }
 };
 
