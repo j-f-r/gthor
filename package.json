@@ -1,6 +1,6 @@
 {
   "name": "gthor",
-  "version": "1.4.1",
+  "version": "1.4.2",
   "description": "Expose GraphQL queries, mutations and subscription as configurable RESTful endpoints",
   "main": "index.js",
   "scripts": {
