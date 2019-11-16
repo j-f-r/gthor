@@ -78,7 +78,7 @@ const defaultRequestFormatter = req => ({ ...req.body, ...req.params, ...req.que
  * @param {function} context - Function that generates the context
  * @param {Endpoint} endpoint - Endpoint configuration
  */
-const mapEndpointToGql = (router, schema, context, requestFormatter, endpoint) => {
+const mapEndpointToGql = (router, schema, context, endpoint) => {
   // Get the gql definition from the endpoint's source
   const definition = utils.gqlDefinition(endpoint.source);
   // Use the method required by the endpoint but defaults to the appropriate
@@ -89,18 +89,18 @@ const mapEndpointToGql = (router, schema, context, requestFormatter, endpoint) =
   // received configured per endpoint, if no function is configured in
   // responseHandler, the default response handler is used.
   const middlewares = [
-    restify(schema, context || defaultContext, requestFormatter || defaultRequestFormatter, endpoint.source),
+    restify(schema, context || defaultContext, endpoint.requestFormatter || defaultRequestFormatter, endpoint.source),
     endpoint.responseHandler || defaultResponseHandler
   ];
   // Finally adds the endpoint + middlewares to the router.
   router[method](endpoint.url, middlewares);
 };
 
-module.exports = ({ schema, endpoints = [], context = undefined, requestFormatter = undefined }) => {
+module.exports = ({ schema, endpoints = [], context = undefined }) => {
   const router = express.Router();
   router.use(bodyParser.json());
   endpoints.map(endpoint =>
-    mapEndpointToGql(router, schema, context, requestFormatter, endpoint)
+    mapEndpointToGql(router, schema, context, endpoint)
   );
 
   return router;
