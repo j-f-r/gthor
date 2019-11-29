@@ -8,6 +8,7 @@
  * @property {function} responseHandler - Middleware to handle returning the GraphQL response. Defaults to {@link defaultResponseHandler}.
  */
 
+const compression = require("compression");
 const express = require("express");
 const { graphql } = require("graphql");
 const bodyParser = require("body-parser");
