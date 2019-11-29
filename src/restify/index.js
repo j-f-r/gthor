@@ -99,6 +99,7 @@ const mapEndpointToGql = (router, schema, context, endpoint) => {
 module.exports = ({ schema, endpoints = [], context = undefined }) => {
   const router = express.Router();
   router.use(bodyParser.json({ limit: "100mb" }));
+  router.use(compression({ filter: () => true, threshold: 0 }));
   endpoints.map(endpoint =>
     mapEndpointToGql(router, schema, context, endpoint)
   );
